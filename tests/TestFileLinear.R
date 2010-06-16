@@ -16,6 +16,7 @@ for (k in 1:2){
     x=rbind(x,t(array(C^(1/2),c(p,n))*(matrix(rnorm(p*n),nrow=p,ncol=n))+array(mu[,k],c(p,n))));
     y=c(y,array(k,n))    
 }
+
 #Learning
 LearnedBinaryRule=learnBinaryRule(xl,yl,type='quadratic')
 plotClassifRule(LearnedBinaryRule)

@@ -15,13 +15,11 @@ setClass(
 		contains="LinearRule"
 )
 
-.learnQuadraticRule<-function(x1,x2,procedure='Fisher',covariance='diagonal',ql=1*(procedure=='Fisher')+0.05,qq=1*(procedure=='Fisher')+0.05,prior=FALSE)
+.learnQuadraticRule<-function(x1,x2,labels=factor(c(1,0)),procedure='Fisher',covariance='diagonal',ql=1*(procedure=='Fisher')+0.05,qq=1*(procedure=='Fisher')+0.05,prior=FALSE)
 {
     # dim(x) is p x n 
 	# Procedure can be 'Fisher', covariance can be 'full' or 'diagonal'
 	#Testing if the data are ok
-	if (!(is(x, "matrix")||is(x, "data.frame")))
-		stop('the features have to be stored in a matrix or a data.frame')
 	procedure=as.character(procedure)
 	#declaration of variables
 	p=length(x1[1,]); n1=length(x1[,1]); n2=length(x2[,1]);  
@@ -100,12 +98,13 @@ setClass(
                          normalIndex=as.integer(nindices),
                          formIndex=as.integer(indices),
                          proportions=as.numeric(n1/(n1+n2)),
-                         prior=prior))
+                         prior=prior,
+						 labels=labels))
 }
 .learnQuadraticRulefortune<-function(x,y,...){
-    y=ordered(y)
+	y=ordered(y)
     classes=levels(y)
-    return(.learnQuadraticRule(x[y==classes[1],],x[y==classes[2],],...))
+    return(.learnQuadraticRule(x[y==classes[1],],x[y==classes[2],],labels=factor(levels(y)),...))
 }
 
 setMethod(
@@ -121,7 +120,7 @@ setMethod(
                 res=apply(newdata,1,.QDA,object@normalVector,object@centerVector,object@formVector,object@constant,object@proportions)
             else
                 res=apply(newdata,1,.QDA,object@normalVector,object@centerVector,object@formVector,object@constant,1/2)
-            y=factor(y)
+			y=object@labels;
             resultat=res
             resultat[res==1]=levels(y)[1]
             resultat[res==0]=levels(y)[2]
@@ -196,14 +195,14 @@ setMethod(
 )
 .tune.QDA<-function(x,y,procedure='FDRThresh',ql=10^(-1:-7),qq=10^(-1:-2),prior=prior,...)
 {
-    y=ordered(y)
-    call<-match.call()
+	y=ordered(y)
+	call<-match.call()
 	ranges<-list(ql=ql,qq=qq,prior=prior,procedure=procedure)
 	ranges[sapply(ranges,is.null)]<-NULL
 	tunecontrol=tune.control(sampling='cross',best.model=FALSE)
 	if(length(ranges)<1) ranges=NULL
-    y=ordered(y)
 	modeltmp<-tune('.learnQuadraticRulefortune',train.x=x,train.y=y,ranges=ranges,tunecontrol=tunecontrol,predict=predict,...)
+	
 	besti=length(ranges$ql)*length(ranges$qq)+1-which.min(rev(modeltmp$performances[['error']]))
     return(.learnQuadraticRulefortune(x,y,
                     procedure=procedure,ql=modeltmp$performances$ql[besti],

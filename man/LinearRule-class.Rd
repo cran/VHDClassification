@@ -14,6 +14,7 @@ Objects can be created by calls of the form \code{new("LinearRule", ...)}.
 }
 \section{Slots}{
   \describe{
+  \item{\code{labels}:}{Object of class \code{"factor"} ~~ }
     \item{\code{normalVector}:}{Object of class \code{"numeric"} ~~ }
     \item{\code{normalIndex}:}{Object of class \code{"numeric"} ~~ }
     \item{\code{centerVector}:}{Object of class \code{"numeric"} ~~ }

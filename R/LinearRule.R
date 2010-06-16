@@ -10,20 +10,20 @@ setClass(
                 normalIndex="integer",
 				centerVector="numeric",
                 proportions="numeric",
-                prior="logical"
+                prior="logical",
+				labels="factor"
 		)
 )
 
-.learnLinearRule<-function(x1,x2,procedure='noThresh',covariance='diagonal',ql=1*(procedure=='Fisher')+0.05,prior=FALSE)
+.learnLinearRule<-function(x1,x2,labels=factor(c(1,0)),procedure='noThresh',covariance='diagonal',ql=1*(procedure=='Fisher')+0.05,prior=FALSE)
 {
     # dim(xi) is p x ni  
     # Procedure can be 'Fisher', covariance can be 'full' or 'diagonal'
     #Testing if the data are ok
-    if (!(is(x, "matrix")||is(x, "data.frame")))
-        stop('the features have to be stored in a matrix or a data.frame')
+
     procedure=as.character(procedure)
     #declaration of variables
-    p=length(x1[1,]); n1=length(x1[,1]); n2=length(x2[,1]);  
+    p=length(x1[1,]); n1=length(x1[,1]); n2=length(x2[,1]);  n=n1+n2;
     center=array(0,p);
     hatmu=array(0,c(2,p));
     hatC=array(0,p)
@@ -63,13 +63,13 @@ setClass(
     return(new(Class="LinearRule",normalVector=F,centerVector=s,
                     normalIndex=as.integer(indices),
                     proportions=as.numeric(n1/(n1+n2)),
-                    prior=prior))
+                    prior=prior,labels=labels))
 }
 
 .learnLinearRulefortune<-function(x,y,...){
     y=ordered(y)
     classes=levels(y)
-    return(.learnLinearRule(x[y==classes[1],],x[y==classes[2],],...))
+    return(.learnLinearRule(x[y==classes[1],],x[y==classes[2],],labels=factor(levels(y)),...))
 }
 
 
@@ -119,7 +119,7 @@ setMethod(
             else
                 res=apply(newdata,1,.LDA,object@normalVector,object@centerVector)
             
-            y=factor(y)
+            y=factor(object@labels)
             resultat=res
             resultat[res==1]=levels(y)[1]
             resultat[res==0]=levels(y)[2]
@@ -150,7 +150,6 @@ setMethod(f=".minus",signature=c(object='LinearRule'),
                                    prior=object@prior))
         }
 )
-
 
 .tune.LDA<-function(x,y,procedure='FDRThresh',ql=10^(-1:-7),prior=prior,...)
 { #### for internal use only

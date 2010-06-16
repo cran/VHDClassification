@@ -53,7 +53,7 @@ Very high dimensional discriminant analysis with thresholding estimation. R. Gir
 \examples{
 ############ Tests 2 classes when the true rule should be quadratic
 #library(VHDClassification)
-p=1000; n=50 ; mu=array(0,c(p,2)) ; C=array(c(1,20),c(p,2)); C[c(1,3,5),1]=40
+p=500; n=50 ; mu=array(0,c(p,2)) ; C=array(c(1,20),c(p,2)); C[c(1,3,5),1]=40
 x=NULL; y=NULL;
 for (k in 1:2){x=rbind(x,t(array(C[,k]^(1/2),c(p,n))*(matrix(rnorm(p*n),nrow=p,ncol=n))+array(mu[,k],c(p,n))));
     y=c(y,array(k,n))}
