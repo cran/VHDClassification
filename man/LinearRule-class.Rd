@@ -31,15 +31,15 @@ Objects can be created by calls of the form \code{new("LinearRule", ...)}.
     \item{show}{\code{signature(object = "LinearRule")}: ... }
 	 }
 }
-\references{ }
-\author{  }
-\note{ }
+
+\author{ Robin Girard }
 
 
-\seealso{
+
+%\seealso{
 %	~~objects to See Also as \code{\link{~~fun~~}}, ~~~
 %	or \code{\linkS4class{CLASSNAME}} for links to other classes
-}
+%}
 \examples{
 showClass("LinearRule")
 }

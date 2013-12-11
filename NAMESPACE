@@ -14,4 +14,4 @@ exportClasses(
 )
 export(".learnLinearRulefortune",".learnQuadraticRulefortune",
 ".LDA",".QDA",".tune.QDA",".tune.LDA")
-import('e1071','lattice','stats','graphics')
+import('methods','e1071','lattice','stats','graphics')

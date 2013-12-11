@@ -97,9 +97,10 @@ setMethod(
     	                   Index=Rule@normalIndex
                            NormalVector=Rule@normalVector[Index]
                            Center=Rule@centerVector[Index]
+    	                   CrossLabels=factor(array(paste(k,' Vs ',j,sep=""),length(Index)))
                            Mydata=rbind(Mydata,
                                    data.frame(NormalVector=NormalVector,Center=Center,Index=factor(Index),
-                                   CrossLabels=factor(array(paste(k,' Vs ',j,sep=""),length(Index)))
+                                   CrossLabels= CrossLabels
                                             )
                                     )
                        }
@@ -109,10 +110,11 @@ setMethod(
                            NormalVector=Rule@normalVector[Index]
                            Center=Rule@centerVector[Index]
                            FormVector=Rule@formVector[Index]
+                           CrossLabels=factor(array(paste(k,' Vs ',j,sep=""),length(Index)))
                            Mydata=rbind(Mydata,
                                   data.frame(NormalVector=NormalVector,FormVector=FormVector,
                                            Center=Center,Index=factor(Index),
-                                           CrossLabels=factor(array(paste(k,' Vs ',j,sep=""),length(Index)))
+                                           CrossLabels=CrossLabels
                                             )
                                         )                   
                         }

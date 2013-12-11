@@ -12,7 +12,8 @@ There are reduction dimension methods (accessible via argument procedure)
 to make the procedure efficient when the number of features is larger than the number of observations
 }
 \usage{
-learnBinaryRule(x, y,type='linear', procedure = "FDRThresh", covariance = "diagonal", ql = NULL, qq = NULL,prior=FALSE)
+learnBinaryRule(x, y,type='linear', procedure = "FDRThresh", 
+covariance = "diagonal", ql = NULL, qq = NULL,prior=FALSE)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -42,9 +43,9 @@ If a vector of values is given a 10 fold cross validation is performed
 \item{prior}{ Do we put a prior on y (taking into account the proportion of the different class in the learning set to build the classification rule}
 
 }
-\details{
+%\details{
 %%  ~~ If necessary, more details than the description above ~~
-}
+%}
 \value{
 A classification rule of class LinearRule if type='linear' and of class QuadraticRule if type='quadratic'.
 }
@@ -67,7 +68,10 @@ Robin Girard
 \examples{
 p=100; n=50 ; mu=array(0,c(p,2)); mu[1:10,1]=1 ;C=array(c(1,20),p)
 x=NULL; y=NULL;
-for (k in 1:2){    x=rbind(x,t(array(C^(1/2),c(p,n))*(matrix(rnorm(p*n),nrow=p,ncol=n))+array(mu[,k],c(p,n))));
+
+for (k in 1:2){    
+  M=matrix(rnorm(p*n),nrow=p,ncol=n)
+  x=rbind(x,t(array(C^(1/2),c(p,n))*(M)+array(mu[,k],c(p,n))));
     y=c(y,array(k,n))    }
 #Learning
 LearnedBinaryRule=learnBinaryRule(x,y)

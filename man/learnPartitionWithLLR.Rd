@@ -10,7 +10,8 @@ A function to learn a rule in case of 2 classes or more.
 to make the procedure efficient when the number of features is larger than the number of observations
 }
 \usage{
-learnPartitionWithLLR(x, y, type = "linear", procedure = "FDRThresh", ql = NULL, qq = NULL, BinaryLearningProcedure = NULL,prior=FALSE)
+learnPartitionWithLLR(x, y, type = "linear", procedure = "FDRThresh", 
+ql = NULL, qq = NULL, BinaryLearningProcedure = NULL,prior=FALSE)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{The Argument are exactly the same as in \code{\link{learnBinaryRule}} except that y may have more than 2 levels 
@@ -37,31 +38,31 @@ vector of factors with two or more levels
 }
 \item{prior}{ Do we put a prior on y (taking into account the proportion of the different class in the learning set to build the classification rule}
 }
-\details{
+%\details{
 %%  ~~ If necessary, more details than the description above ~~
-}
-\value{
+%}
+%\value{
 %%  ~Describe the value returned
 %%  If it is a LIST, use
 %%  \item{comp1 }{Description of 'comp1'}
 %%  \item{comp2 }{Description of 'comp2'}
 %% ...
-}
-\references{
+%}
+%\references{
 %% ~put references to the literature/web site here ~
-}
-\author{
+%}
+%\author{
 %%  ~~who you are~~
-}
-\note{
+%}
+%\note{
 %%  ~~further notes~~
-}
+%}
 
 %% ~Make other sections like Warning with \section{Warning }{....} ~
 
-\seealso{
+%\seealso{
 %% ~~objects to See Also as \code{\link{help}}, ~~~
-}
-\examples{
+%}
+%\examples{
 
-}
+%}

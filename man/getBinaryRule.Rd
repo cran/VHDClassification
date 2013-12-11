@@ -22,9 +22,9 @@ an existing label
 an existing label 
 }
 }
-\details{
+%\details{
 %%  ~~ If necessary, more details than the description above ~~
-}
+%}
 \value{
 A binary classification rule. Can either be an object of class LinearRule or an object of class QuadraticRule
 }

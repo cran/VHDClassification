@@ -29,16 +29,16 @@ Objects can be created by calls of the form \code{new("PartitionWithLLR", ...)}.
     \item{show}{\code{signature(object = "PartitionWithLLR")}: ... }
 	 }
 }
-\references{ }
-\author{  }
-\note{ }
+%\references{ }
+\author{ Robin Girard }
+%\note{ }
 
 
 
-\seealso{
+%\seealso{
 %	~~objects to See Also as \code{\link{~~fun~~}}, ~~~
 %	or \code{\linkS4class{CLASSNAME}} for links to other classes
-}
+%}
 \examples{
 showClass("PartitionWithLLR")
 }

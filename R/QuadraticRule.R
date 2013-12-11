@@ -201,7 +201,8 @@ setMethod(
 	ranges[sapply(ranges,is.null)]<-NULL
 	tunecontrol=tune.control(sampling='cross',best.model=FALSE)
 	if(length(ranges)<1) ranges=NULL
-	modeltmp<-tune('.learnQuadraticRulefortune',train.x=x,train.y=y,ranges=ranges,tunecontrol=tunecontrol,predict=predict,...)
+	modeltmp<-tune('.learnQuadraticRulefortune',train.x=x,train.y=y,ranges=ranges,
+                 tunecontrol=tunecontrol,predict.func=predict,...)
 	
 	besti=length(ranges$ql)*length(ranges$qq)+1-which.min(rev(modeltmp$performances[['error']]))
     return(.learnQuadraticRulefortune(x,y,

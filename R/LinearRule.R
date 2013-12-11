@@ -85,7 +85,8 @@ setMethod(
             NormalVector=object@normalVector[Index]
             Center=object@centerVector[Index]
             Mydata=data.frame(NormalVector=NormalVector,Center=Center,Index=Index)
-            return(xyplot(NormalVector+Center~Index,data=Mydata,auto.key = TRUE,...))
+            A=TRUE;
+            return(xyplot(NormalVector+Center~Index,data=Mydata,auto.key = A,...))
         }
 )
 
@@ -160,7 +161,8 @@ setMethod(f=".minus",signature=c(object='LinearRule'),
 	ranges[sapply(ranges,is.null)]<-NULL
 	tunecontrol=tune.control(sampling='cross',best.model=FALSE)
     if(length(ranges)<1) ranges=NULL
-	modeltmp<-tune('.learnLinearRulefortune',train.x=x,train.y=y,ranges=ranges,tunecontrol=tunecontrol,predict=predict,...)
+	modeltmp<-tune('.learnLinearRulefortune',train.x=x,train.y=y,ranges=ranges,
+                 tunecontrol=tunecontrol,predict.func=predict,...)
     besti=length(ranges$ql)+1-which.min(rev(modeltmp$performances[['error']]))
     return(.learnLinearRulefortune(x,y,procedure=procedure,ql=modeltmp$performances$ql[besti],prior=prior))
 }

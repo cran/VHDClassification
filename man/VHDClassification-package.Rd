@@ -48,21 +48,29 @@ Very high dimensional discriminant analysis with thresholding estimation. R. Gir
 \keyword{ high dimension  }
 \keyword{ classification }
 \keyword{ dimension reduction }
-\seealso{
-}
+
 \examples{
 ############ Tests 2 classes when the true rule should be quadratic
 #library(VHDClassification)
 p=500; n=50 ; mu=array(0,c(p,2)) ; C=array(c(1,20),c(p,2)); C[c(1,3,5),1]=40
 x=NULL; y=NULL;
-for (k in 1:2){x=rbind(x,t(array(C[,k]^(1/2),c(p,n))*(matrix(rnorm(p*n),nrow=p,ncol=n))+array(mu[,k],c(p,n))));
-    y=c(y,array(k,n))}
+for (k in 1:2)
+{
+  M=matrix(rnorm(p*n),nrow=p,ncol=n)
+  tmp=array(C[,k]^(1/2),c(p,n))*(M)+array(mu[,k],c(p,n))
+  x=rbind(x,t(tmp));
+  y=c(y,array(k,n))
+  }
 #Learning
 LearnedQuadBinaryRule=learnBinaryRule(x,y,type='quadratic')
 LearnedLinBinaryRule=learnBinaryRule(x,y) # default is linear type
 # for comparison with SVM
 # require(e1071)
-# svmRule=best.tune('svm',train.x=x,train.y=factor(y),ranges=list(gamma=c(2^(-4:4),cost = 2^(-2:2))))
+# svmRule=best.tune('svm',
+#              train.x=x,
+#              train.y=factor(y),
+#              ranges=list(gamma=c(2^(-4:4),
+#              cost = 2^(-2:2))))
 # for comparison with randomForest
 require(randomForest)
 RF <- best.tune('randomForest',x,factor(y),ranges=list(ntree = c(100,500)))
@@ -79,7 +87,8 @@ RF <- best.tune('randomForest',x,factor(y),ranges=list(ntree = c(100,500)))
 #Testing Set
 x=NULL; y=NULL;
 for (k in 1:2){
-    x=rbind(x,t(array(C[,k]^(1/2),c(p,n))*(matrix(rnorm(p*n),nrow=p,ncol=n))+array(mu[,k],c(p,n))));
+    M=matrix(rnorm(p*n),nrow=p,ncol=n)
+    x=rbind(x,t(array(C[,k]^(1/2),c(p,n))*(M)+array(mu[,k],c(p,n))));
     y=c(y,array(k,n))    
 }
 #Testing
@@ -90,7 +99,8 @@ RFScore=mean((y!=predict(RF,myTestingdata$x))) ;
 #SVMScore=mean((y!=predict(svmRule,x))) ;
 #comparison with nearest chrunken centroid
 myTestingdata=list(x=t(x),y=y)
-#SCScore=mean((myTestingdata$y!=as.numeric(pamr.predict(mytrain, myTestingdata$x,threshold=thresh,type="class"))))
+#V=as.numeric(pamr.predict(mytrain, myTestingdata$x,threshold=thresh,type="class"))
+#SCScore=mean((myTestingdata$y!=V))
 cat('\n')
 cat('What does it cost to use type=linear  when the rule  is quadratic ? ','\n',
 'Score of the linear rule: ',LDAScore,'\n',
@@ -106,7 +116,8 @@ plotClassifRule(LearnedQuadBinaryRule)
 #p=100; n=50 ; mu=array(0,c(p,2)); mu[1:10,1]=1 ;C=array(c(1,20),p)
 #x=NULL; y=NULL;
 #for (k in 1:2){
-#	x=rbind(x,t(array(C^(1/2),c(p,n))*(matrix(rnorm(p*n),nrow=p,ncol=n))+array(mu[,k],c(p,n))));
+# M=matrix(rnorm(p*n),nrow=p,ncol=n)
+#	x=rbind(x,t(array(C^(1/2),c(p,n))*(M)+array(mu[,k],c(p,n))));
 #    y=c(y,array(k,n))}
 #Learning
 #LearnedQuadBinaryRule=learnBinaryRule(x,y,type='quadratic')
@@ -122,7 +133,8 @@ plotClassifRule(LearnedQuadBinaryRule)
 #Testing Set
 #x=NULL; y=NULL;
 #for (k in 1:2){
-#    x=rbind(x,t(array(C^(1/2),c(p,n))*(matrix(rnorm(p*n),nrow=p,ncol=n))+array(mu[,k],c(p,n))));
+# M=matrix(rnorm(p*n),nrow=p,ncol=n)
+#    x=rbind(x,t(array(C^(1/2),c(p,n))*(M)+array(mu[,k],c(p,n))));
 #    y=c(y,array(k,n))    
 #}
 #Testing
@@ -131,11 +143,15 @@ plotClassifRule(LearnedQuadBinaryRule)
 #LDAScore=mean((y!=predict(LearnedLinBinaryRule,myTestingdata$x))) ;
 #comparison with nearest shrunken centroid
 #myTestingdata=list(x=t(x),y=y)
-#SCScore=mean((myTestingdata$y!=as.numeric(pamr.predict(mytrain,threshold=thresh, myTestingdata$x,type="class"))))
+#tmp=as.numeric(pamr.predict(mytrain,threshold=thresh,
+# myTestingdata$x,type="class"))
+#SCScore=mean((myTestingdata$y!=tmp))
 #cat('\n',
-#'What does it cost to use type=quadratic rule when the true optimal rule is linear ? ','\n',
+#'What does it cost to use type=
+# quadratic rule when the true optimal rule is linear ? ','\n',
 #'Score of the linear rule: ',LDAScore,'\n',
-#'Score of the  rule with type=quadratic : ',QDAScore,'\n', 'it detects that the true rule is linear?\n',
+#'Score of the  rule with type=quadratic : ',QDAScore,'\n',
+# 'it detects that the true rule is linear?\n',
 #'Score of the nearest shrunken centroid rule: ',SCScore,'\n')
 
 #plotClassifRule(LearnedQuadBinaryRule)
@@ -147,12 +163,14 @@ plotClassifRule(LearnedQuadBinaryRule)
 #x=NULL; y=NULL;
 #for (k in 1:3){
 #    if (k<3){
-#    x=rbind(x,t(array(C^(1/2),c(p,n))*(matrix(rnorm(p*n),nrow=p,ncol=n))+array(mu[,k],c(p,n))));
+#     M=matrix(rnorm(p*n),nrow=p,ncol=n)
+#    x=rbind(x,t(array(C^(1/2),c(p,n))*(M)+array(mu[,k],c(p,n))));
 #    y=c(y,array(k,n))}
 #    else
 #    {
 #    tildeC=C; tildeC[1:10]=40; 
-#    x=rbind(x,t(array(tildeC^(1/2),c(p,n))*(matrix(rnorm(p*n),nrow=p,ncol=n))+array(mu[,k],c(p,n))));
+#     M=matrix(rnorm(p*n),nrow=p,ncol=n)
+#    x=rbind(x,t(array(tildeC^(1/2),c(p,n))*(M)+array(mu[,k],c(p,n))));
 #    y=c(y,array(k,n))
 #    }
 #    }
@@ -167,12 +185,14 @@ plotClassifRule(LearnedQuadBinaryRule)
 #x=NULL; y=NULL;
 #for (k in 1:3){
 #    if (k<3){
-#    x=rbind(x,t(array(C^(1/2),c(p,n))*(matrix(rnorm(p*n),nrow=p,ncol=n))+array(mu[,k],c(p,n))));
+#     M=matrix(rnorm(p*n),nrow=p,ncol=n)
+#    x=rbind(x,t(array(C^(1/2),c(p,n))*(M)+array(mu[,k],c(p,n))));
 #    y=c(y,array(k,n))}
 #    else
 #    {
 #    tildeC=C; tildeC[1:10]=40; 
-#    x=rbind(x,t(array(tildeC^(1/2),c(p,n))*(matrix(rnorm(p*n),nrow=p,ncol=n))+array(mu[,k],c(p,n))));
+#     M=matrix(rnorm(p*n),nrow=p,ncol=n)
+#    x=rbind(x,t(array(tildeC^(1/2),c(p,n))*(M)+array(mu[,k],c(p,n))));
 #    y=c(y,array(k,n))
 #    }
 #    }

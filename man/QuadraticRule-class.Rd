@@ -35,7 +35,7 @@ Class \code{"\linkS4class{LinearRule}"}, directly.
 }
 \references{ See my preprint Preprint }
 \author{ robin girard }
-\note{}
+%\note{}
 
  %~Make other sections like Warning with \section{Warning }{....} ~
 
